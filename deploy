@@ -1,3 +1,10 @@
 #!/bin/bash
 
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied!"
+    echo "Usage: ./deploy [user]"
+    exit 1
+fi
+
 ansible-playbook -i hosts nginx.yaml -k -u $1
