@@ -1,0 +1,29 @@
+---
+# install and setup nginx
+- hosts: all
+  sudo: True
+
+  tasks:
+    - name: update apt
+      command: apt-get update
+
+    - name: install nginx
+      apt: pkg=nginx state=installed
+
+    - name: create public directory
+      command: mkdir /usr/share/nginx/puppet
+      ignore_errors: yes
+
+    - name: copy custom nginx configuration
+      copy: backup=yes src=./files/puppet dest=/etc/nginx/sites-available/puppet
+
+    - name: symlink custom nginx configuration
+      file: src=/etc/nginx/sites-available/puppet dest=/etc/nginx/sites-enabled/puppet state=link
+      notify: restart nginx
+
+    - name: copy index.html
+      copy: backup=yes src=./files/index.html dest=/usr/share/nginx/puppet/index.html
+
+  handlers:
+    - name: restart nginx
+      command: /etc/init.d/nginx restart
