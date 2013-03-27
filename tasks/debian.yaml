@@ -1,0 +1,15 @@
+---
+
+# add nginx repo to apt
+
+- name: install python-software-properties
+  apt: pkg=python-software-properties state=installed
+
+- name: install nginx apt repositories
+  command: /usr/bin/add-apt-repository -y ppa:nginx/stable
+
+- name: update apt repositories
+  command: apt-get update
+
+- name: install nginx via apt
+  apt: pkg=nginx state=installed

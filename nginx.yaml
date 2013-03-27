@@ -6,20 +6,10 @@
   tasks:
     # our installation varies based on the target machine, this will handle
     # apt (Debian/Ubuntu) and yum (Red Hat/CentOS) installs
-    - name: update apt repositories
-      command: apt-get update
+    - include: ./tasks/debian.yaml
       when_string: $ansible_distribution == 'Debian' or $ansible_distribution == 'Ubuntu'
 
-    - name: install nginx via apt
-      apt: pkg=nginx state=installed
-      when_string: $ansible_distribution == 'Debian' or $ansible_distribution == 'Ubuntu'
-
-    - name: install nginx yum repository
-      copy: src=./files/nginx.repo dest=/etc/yum.repos.d/nginx.repo
-      when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
-
-    - name: install nginx via yum
-      yum: pkg=nginx state=installed
+    - include: ./tasks/rhel.yaml
       when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
 
     - name: create directory for serving index.html
@@ -29,11 +19,8 @@
     - name: copy index.html
       copy: backup=yes src=./files/index.html dest=/usr/share/nginx/puppet/index.html
 
-    - name: copy custom nginx configuration to sites-available
-      copy: backup=yes src=./files/puppet dest=/etc/nginx/sites-available/puppet
-
-    - name: symlink custom nginx configuration to sites-enabled
-      file: src=/etc/nginx/sites-available/puppet dest=/etc/nginx/sites-enabled/puppet state=link
+    - name: copy custom nginx configuration to /etc/conf.d/puppet.conf
+      copy: backup=yes src=./files/puppet.conf dest=/etc/nginx/conf.d/puppet.conf
       notify: restart nginx
 
   handlers:
