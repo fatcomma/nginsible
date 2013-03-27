@@ -1,6 +1,3 @@
-turnt-octo-archer
-=================
-
 Prerequisites
 =============
 Once you have easy_install, make sure Ansible is installed with pip:
@@ -10,8 +7,10 @@ Once you have easy_install, make sure Ansible is installed with pip:
 
 Deploying
 =========
-Once Ansible is installed you can deploy by running:
+Edit the `hosts` file and add target hostnames (by default `hosts` only contains a single `localhost` entry).
+
+You can deploy by running:
 
     $ ./deploy [user]
 
-This will run the deploy scripts as the user specified on the command line. 
+The deploy user specified above must exist on the target system and must have sudo capabilities to run.
