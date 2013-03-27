@@ -18,10 +18,6 @@
       copy: src=./files/nginx.repo dest=/etc/yum.repos.d/nginx.repo
       when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
 
-    - name: update yum repositories
-      command: yum update
-      when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
-
     - name: install nginx via yum
       yum: pkg=nginx state=installed
       when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
