@@ -1,28 +1,44 @@
 ---
-# install and setup nginx
+# install and setup nginx to serve index.html below on http://localhost:8080
 - hosts: all
   sudo: True
 
   tasks:
-    - name: update apt
+    # our installation varies based on the target machine, this will handle
+    # apt (Debian/Ubuntu) and yum (Red Hat/CentOS) installs
+    - name: update apt repositories
       command: apt-get update
+      when_string: $ansible_distribution == 'Debian' or $ansible_distribution == 'Ubuntu'
 
-    - name: install nginx
+    - name: install nginx via apt
       apt: pkg=nginx state=installed
+      when_string: $ansible_distribution == 'Debian' or $ansible_distribution == 'Ubuntu'
 
-    - name: create public directory
+    - name: install nginx yum repository
+      copy: src=./files/nginx.repo dest=/etc/yum.repos.d/nginx.repo
+      when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
+
+    - name: update yum repositories
+      command: yum update
+      when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
+
+    - name: install nginx via yum
+      yum: pkg=nginx state=installed
+      when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
+
+    - name: create directory for serving index.html
       command: mkdir /usr/share/nginx/puppet
       ignore_errors: yes
 
-    - name: copy custom nginx configuration
-      copy: backup=yes src=./files/puppet dest=/etc/nginx/sites-available/puppet
-
-    - name: symlink custom nginx configuration
-      file: src=/etc/nginx/sites-available/puppet dest=/etc/nginx/sites-enabled/puppet state=link
-      notify: restart nginx
-
     - name: copy index.html
       copy: backup=yes src=./files/index.html dest=/usr/share/nginx/puppet/index.html
+
+    - name: copy custom nginx configuration to sites-available
+      copy: backup=yes src=./files/puppet dest=/etc/nginx/sites-available/puppet
+
+    - name: symlink custom nginx configuration to sites-enabled
+      file: src=/etc/nginx/sites-available/puppet dest=/etc/nginx/sites-enabled/puppet state=link
+      notify: restart nginx
 
   handlers:
     - name: restart nginx
