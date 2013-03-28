@@ -1,6 +1,5 @@
 # Instructions
 
-This script runs an Ansible playbook across one or many target hosts and installs/configures nginx to serve a page on http://localhost:8080. 
 This script installs/configures nginx to serve a page on http://localhost:8080 across one or more target hosts via [Ansible](http://ansible.cc/).
 
 Tested on Debian/Ubuntu and RHEL/CentOS distributions.
