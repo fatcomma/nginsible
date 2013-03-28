@@ -19,8 +19,8 @@
     - name: copy index.html
       copy: backup=yes src=./files/index.html dest=/usr/share/nginx/puppet/index.html
 
-    - name: copy custom nginx configuration to /etc/conf.d/puppet.conf
-      copy: backup=yes src=./files/puppet.conf dest=/etc/nginx/conf.d/puppet.conf
+    - name: copy custom nginx configuration to /etc/nginx/nginx.conf
+      copy: backup=yes src=./files/nginx.conf dest=/etc/nginx/nginx.conf
       notify: restart nginx
 
   handlers:
