@@ -2,11 +2,11 @@
 
 # add nginx repo to yum
 
-  - name: install nginx yum repository
+  - name: install nginx yum repository (Red Hat)
     copy: src=./files/rhel.nginx.repo dest=/etc/yum.repos.d/nginx.repo
     when_string: $ansible_distribution == 'Red Hat'
 
-  - name: install nginx yum repository
+  - name: install nginx yum repository (CentOS)
     copy: src=./files/centos.nginx.repo dest=/etc/yum.repos.d/nginx.repo
     when_string: $ansible_distribution == 'CentOS' 
 

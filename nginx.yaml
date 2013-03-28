@@ -12,14 +12,13 @@
     - include: ./tasks/rhel.yaml
       when_string: $ansible_distribution == 'CentOS' or $ansible_distribution == 'Red Hat'
 
-    - name: create directory for serving index.html
-      command: mkdir /usr/share/nginx/puppet
-      ignore_errors: yes
+    - name: create /usr/share/nginx/puppet
+      file: path=/usr/share/nginx/puppet state=directory
 
-    - name: copy index.html
+    - name: copy index.html to /usr/share/nginx/puppet
       copy: backup=yes src=./files/index.html dest=/usr/share/nginx/puppet/index.html
 
-    - name: copy custom nginx configuration to /etc/nginx/nginx.conf
+    - name: copy nginx configuration to /etc/nginx/nginx.conf
       copy: backup=yes src=./files/nginx.conf dest=/etc/nginx/nginx.conf
       notify: restart nginx
 
