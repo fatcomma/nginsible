@@ -29,4 +29,3 @@ For details see Ansible's documentation on [Hosts and Groups](http://ansible.cc/
 NOTE: The [user] must exist on the target system and must have sudo capabilities.
 
 Once the target hosts have been defined use `./deploy [user]` to run.  
-
